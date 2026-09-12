@@ -1,5 +1,7 @@
 # Cube Combat
 
+Project Contains the source code for the Cubic engine (engine powering Cube combat) and the actual source code of Cube Combat with its assets)
+
 ## Licensing & Asset Credits
 
 ### Source Code
