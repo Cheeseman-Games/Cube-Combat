@@ -1,0 +1,35 @@
+[package]
+name = "cube_combat"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+web = ["dep:wasm-bindgen", "dep:js-sys", "dep:web-sys"]
+
+[dependencies]
+wasm-bindgen = { version = "0.2", optional = true }
+js-sys = { version = "0.3", optional = true }
+web-sys = { version = "0.3", optional = true, features = [
+    "Window",
+    "Document",
+    "HtmlCanvasElement",
+    "CanvasRenderingContext2d",
+    "KeyboardEvent",
+    "Event",
+    "EventTarget",
+    "Element",
+    "HtmlElement",
+    "Performance",
+    "Node",
+] }
+
+[[bin]]
+name = "cube-combat"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = "s"

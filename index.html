@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cube Combat</title>
+    <style>
+      body {
+        margin: 0;
+        background: #16181d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: monospace;
+      }
+      canvas {
+        background: #171a20;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game" width="800" height="500"></canvas>
+    <script type="module">
+      import init, { start } from "./pkg/cube_combat.js";
+      await init();
+      start("game");
+    </script>
+  </body>
+</html>
