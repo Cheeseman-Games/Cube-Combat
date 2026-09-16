@@ -4,4 +4,4 @@ As mentioned in the README.md in the projects root, this assets are under CC BY-
 
 ## Credits
 
-Cube-Combat.png by fkm-X3 (its a placeholder for now. not used anywhere yet in the project)
+Cube-Combat-placeholder.png by fkm-X3
