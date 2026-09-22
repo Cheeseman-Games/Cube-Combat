@@ -1,8 +1,9 @@
+use crate::app::App;
 use crate::engine::canvas::CanvasRenderer;
 use crate::engine::input::{InputState, KeyCode};
 use crate::engine::render::DrawList;
+use crate::engine::GameDriver;
 use crate::game::constants::*;
-use crate::game::Game;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::closure::Closure;
@@ -30,10 +31,10 @@ pub fn start(canvas_id: &str) -> Result<(), JsValue> {
         .dyn_into()?;
 
     let input = Rc::new(RefCell::new(InputState::new()));
-    let game = Rc::new(RefCell::new(Game::new()));
+    let performance = window.performance().ok_or_else(|| JsValue::from_str("no performance"))?;
+    let app = Rc::new(RefCell::new(App::new_seeded(performance.now() as u32)));
     let renderer = Rc::new(RefCell::new(CanvasRenderer::new(context, ARENA_W, ARENA_H)));
     let list = Rc::new(RefCell::new(DrawList::new()));
-    let performance = window.performance().ok_or_else(|| JsValue::from_str("no performance"))?;
 
     let input_for_keys = Rc::clone(&input);
     let on_key_down = Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
@@ -60,7 +61,7 @@ pub fn start(canvas_id: &str) -> Result<(), JsValue> {
     let window_loop = window.clone();
     let performance_loop = performance.clone();
     let input_loop = Rc::clone(&input);
-    let game_loop = Rc::clone(&game);
+    let app_loop = Rc::clone(&app);
     let renderer_loop = Rc::clone(&renderer);
     let list_loop = Rc::clone(&list);
     let accumulator = Rc::new(RefCell::new(0.0f64));
@@ -74,15 +75,15 @@ pub fn start(canvas_id: &str) -> Result<(), JsValue> {
 
         while *accumulator.borrow() >= STEP {
             let frame = input_loop.borrow_mut().begin_frame();
-            game_loop
+            app_loop
                 .borrow_mut()
                 .simulate(STEP as f32, &input_loop.borrow(), &frame);
             *accumulator.borrow_mut() -= STEP;
         }
 
-        let g = game_loop.borrow();
-        g.draw(&mut *list_loop.borrow_mut());
-        drop(g);
+        let a = app_loop.borrow();
+        a.draw(&mut *list_loop.borrow_mut());
+        drop(a);
         renderer_loop.borrow_mut().render(&*list_loop.borrow());
 
         if let Some(f) = loop_ref.borrow().as_ref() {

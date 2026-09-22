@@ -1,3 +1,4 @@
+pub mod ai;
 pub mod collision;
 pub mod constants;
 pub mod draw;
@@ -8,8 +9,16 @@ use crate::engine::input::{FrameInput, InputState, KeyCode};
 use crate::engine::math::Rect;
 use crate::engine::world::{EntityId, World};
 use crate::engine::{System, TickContext};
+use crate::game::ai::AiDifficulty;
 use crate::game::constants::*;
 use crate::game::fighters::{Player, Transform};
+
+/// How a match is played. In 1-player mode the red cube is driven by AI.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum GameMode {
+    TwoPlayer,
+    OnePlayer,
+}
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Side {
@@ -60,21 +69,29 @@ pub struct Game {
     red: EntityId,
     wins: [u32; 2],
     state: MatchState,
+    show_hints: bool,
 }
 
 impl Game {
     pub fn new() -> Self {
+        Self::with(GameMode::TwoPlayer, AiDifficulty::Normal, true)
+    }
+
+    pub fn with(mode: GameMode, ai: AiDifficulty, show_hints: bool) -> Self {
         let mut world = World::new();
 
         let blue = Self::spawn_fighter(&mut world, Side::Blue, SPAWN_PAD);
         let red = Self::spawn_fighter(&mut world, Side::Red, ARENA_W - SPAWN_PAD - CUBE_SIZE);
 
-        let systems: Vec<Box<dyn System>> = vec![
-            Box::new(fighters::ControlSystem),
-            Box::new(fighters::FightSystem::default()),
-            Box::new(movement::MovementSystem::default()),
-            Box::new(collision::AttackCollisionSystem::default()),
-        ];
+        let mut systems: Vec<Box<dyn System>> = vec![Box::new(fighters::ControlSystem {
+            red_is_ai: mode == GameMode::OnePlayer,
+        })];
+        if mode == GameMode::OnePlayer {
+            systems.push(Box::new(ai::AiControlSystem::new(ai)));
+        }
+        systems.push(Box::new(fighters::FightSystem::default()));
+        systems.push(Box::new(movement::MovementSystem::default()));
+        systems.push(Box::new(collision::AttackCollisionSystem::default()));
 
         Self {
             world,
@@ -83,6 +100,7 @@ impl Game {
             red,
             wins: [0, 0],
             state: MatchState::Playing,
+            show_hints,
         }
     }
 
@@ -125,6 +143,10 @@ impl Game {
             Side::Blue => 0,
             Side::Red => 1,
         }]
+    }
+
+    pub fn show_hints(&self) -> bool {
+        self.show_hints
     }
 
     /// Advance one fixed simulation step.
@@ -331,5 +353,20 @@ mod tests {
         tick(&mut game, &mut input, 10);
 
         assert_eq!(x_of(&game, Side::Blue), start, "cannot move while slashing");
+    }
+
+    #[test]
+    fn ai_drives_red_toward_blue() {
+        let mut game = Game::with(GameMode::OnePlayer, AiDifficulty::Normal, true);
+        let mut input = InputState::new();
+        let start = x_of(&game, Side::Red);
+
+        press(&mut input, &[KeyCode::D]);
+        tick(&mut game, &mut input, 60);
+
+        assert!(
+            x_of(&game, Side::Red) < start,
+            "AI should move red toward the idle blue cube"
+        );
     }
 }

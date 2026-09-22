@@ -10,9 +10,12 @@ pub enum KeyCode {
     C,
     Left,
     Right,
+    Up,
+    Down,
     BracketLeft,
     BracketRight,
     Enter,
+    Escape,
 }
 
 impl KeyCode {
@@ -25,9 +28,12 @@ impl KeyCode {
             "c" | "C" => Some(KeyCode::C),
             "ArrowLeft" => Some(KeyCode::Left),
             "ArrowRight" => Some(KeyCode::Right),
+            "ArrowUp" => Some(KeyCode::Up),
+            "ArrowDown" => Some(KeyCode::Down),
             "[" => Some(KeyCode::BracketLeft),
             "]" => Some(KeyCode::BracketRight),
             "Enter" => Some(KeyCode::Enter),
+            "Escape" => Some(KeyCode::Escape),
             _ => None,
         }
     }

@@ -111,13 +111,15 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
 
     r.fill_rect(0.0, FLOOR_Y, ARENA_W, 3.0, FLOOR);
 
-    r.text(
-        "P1: A/D move   X slash   C block    |    P2: arrows move   [ slash   ] block    |    Enter: rematch",
-        22.0,
-        ARENA_H - 26.0,
-        13.0,
-        MUTED,
-    );
+    if game.show_hints() {
+        r.text(
+            "P1: A/D move   X slash   C block    |    P2: arrows move   [ slash   ] block    |    Enter: rematch",
+            22.0,
+            ARENA_H - 26.0,
+            13.0,
+            MUTED,
+        );
+    }
 
     if let MatchState::Ended(winner) = game.state() {
         let col = palette(winner);

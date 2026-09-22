@@ -69,12 +69,19 @@ impl Player {
 }
 
 /// Maps raw key state onto fighter intents. Touches only the `Player` store.
-pub struct ControlSystem;
+/// In 1-player mode `red_is_ai` is set so the red cube is left to the AI
+/// control system instead.
+pub struct ControlSystem {
+    pub red_is_ai: bool,
+}
 
 impl System for ControlSystem {
     fn run(&mut self, ctx: &mut TickContext<'_>) {
         let players = ctx.world.store_mut::<Player>();
         for player in players.iter_mut().filter_map(Option::as_mut) {
+            if player.side == Side::Red && self.red_is_ai {
+                continue;
+            }
             let (left, right, slash, block) = match player.side {
                 Side::Blue => (KeyCode::A, KeyCode::D, KeyCode::X, KeyCode::C),
                 Side::Red => (
