@@ -1,7 +1,7 @@
-use crate::engine::input::KeyCode;
-use crate::engine::math::Rect;
-use crate::engine::world::{EntityId, World};
-use crate::engine::{System, TickContext};
+use cubic_engine::input::KeyCode;
+use cubic_engine::math::Rect;
+use cubic_engine::world::{EntityId, World};
+use cubic_engine::{System, TickContext};
 use crate::game::constants::*;
 use crate::game::{AttackBox, Side};
 

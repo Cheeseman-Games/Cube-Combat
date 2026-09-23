@@ -1,4 +1,4 @@
-use crate::engine::render::{Renderer, Rgba};
+use cubic_engine::render::{Renderer, Rgba};
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
 use crate::game::{AttackBox, Game, MatchState, Side};

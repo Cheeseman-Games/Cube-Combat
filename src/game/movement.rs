@@ -1,5 +1,5 @@
-use crate::engine::world::EntityId;
-use crate::engine::{System, TickContext};
+use cubic_engine::world::EntityId;
+use cubic_engine::{System, TickContext};
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
 

@@ -1,4 +1,4 @@
-use crate::engine::{System, TickContext};
+use cubic_engine::{System, TickContext};
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
 use crate::game::Side;

@@ -8,9 +8,10 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = []
-web = ["dep:wasm-bindgen", "dep:js-sys", "dep:web-sys"]
+web = ["dep:wasm-bindgen", "dep:js-sys", "dep:web-sys", "cubic-engine/web"]
 
 [dependencies]
+cubic-engine = { git = "https://github.com/Cheeseman-Games/Cubic-Engine.git" }
 wasm-bindgen = { version = "0.2", optional = true }
 js-sys = { version = "0.3", optional = true }
 web-sys = { version = "0.3", optional = true, features = [
@@ -33,3 +34,5 @@ path = "src/main.rs"
 
 [profile.release]
 opt-level = "s"
+[patch."https://github.com/Cheeseman-Games/Cubic-Engine"]
+cubic-engine = { path = "../Cubic-Engine" }

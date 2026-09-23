@@ -1,6 +1,6 @@
-use crate::engine::input::{FrameInput, InputState, KeyCode};
-use crate::engine::render::Renderer;
-use crate::engine::GameDriver;
+use cubic_engine::input::{FrameInput, InputState, KeyCode};
+use cubic_engine::render::Renderer;
+use cubic_engine::GameDriver;
 use crate::game::ai::AiDifficulty;
 use crate::game::Game;
 use crate::game::GameMode;
@@ -77,8 +77,8 @@ impl GameDriver for App {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::engine::input::InputState;
-    use crate::engine::render::DrawList;
+    use cubic_engine::input::InputState;
+    use cubic_engine::render::DrawList;
 
     fn tap(input: &mut InputState, keys: &[KeyCode]) {
         for &key in keys {

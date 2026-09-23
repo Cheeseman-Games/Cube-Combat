@@ -1,5 +1,5 @@
-use crate::engine::input::{FrameInput, KeyCode};
-use crate::engine::render::{Renderer, Rgba};
+use cubic_engine::input::{FrameInput, KeyCode};
+use cubic_engine::render::{Renderer, Rgba};
 use crate::game::ai::AiDifficulty;
 use crate::game::constants::*;
 use crate::game::GameMode;

@@ -5,10 +5,10 @@ pub mod draw;
 pub mod fighters;
 pub mod movement;
 
-use crate::engine::input::{FrameInput, InputState, KeyCode};
-use crate::engine::math::Rect;
-use crate::engine::world::{EntityId, World};
-use crate::engine::{System, TickContext};
+use cubic_engine::input::{FrameInput, InputState, KeyCode};
+use cubic_engine::math::Rect;
+use cubic_engine::world::{EntityId, World};
+use cubic_engine::{System, TickContext};
 use crate::game::ai::AiDifficulty;
 use crate::game::constants::*;
 use crate::game::fighters::{Player, Transform};
@@ -174,7 +174,7 @@ impl Game {
     }
 
     /// Render the game to the given backend.
-    pub fn draw(&self, renderer: &mut dyn crate::engine::render::Renderer) {
+    pub fn draw(&self, renderer: &mut dyn cubic_engine::render::Renderer) {
         draw::draw(self, renderer);
     }
 
