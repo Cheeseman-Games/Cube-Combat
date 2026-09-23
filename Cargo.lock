@@ -18,6 +18,17 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 name = "cube_combat"
 version = "0.1.0"
 dependencies = [
+ "cubic-engine",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "cubic-engine"
+version = "0.1.0"
+source = "git+https://github.com/Cheeseman-Games/Cubic-Engine.git#9407df6b60567833290b1f71e7de408f90430919"
+dependencies = [
  "js-sys",
  "wasm-bindgen",
  "web-sys",
