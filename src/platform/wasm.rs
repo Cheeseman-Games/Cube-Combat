@@ -1,8 +1,8 @@
 use crate::app::App;
-use cubic_engine::canvas::CanvasRenderer;
 use cubic_engine::input::{InputState, KeyCode};
 use cubic_engine::render::DrawList;
 use cubic_engine::GameDriver;
+use cubic_render::canvas::CanvasRenderer;
 use crate::game::constants::*;
 use std::cell::RefCell;
 use std::rc::Rc;

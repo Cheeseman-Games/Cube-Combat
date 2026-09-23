@@ -8,10 +8,11 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = []
-web = ["dep:wasm-bindgen", "dep:js-sys", "dep:web-sys", "cubic-engine/web"]
+web = ["dep:wasm-bindgen", "dep:js-sys", "dep:web-sys", "dep:cubic-render", "cubic-render/web"]
 
 [dependencies]
-cubic-engine = { git = "https://github.com/Cheeseman-Games/Cubic-Engine.git" }
+cubic-engine = { package = "cubic-core", git = "https://github.com/Cheeseman-Games/Cubic-Engine.git" }
+cubic-render = { package = "cubic-render", git = "https://github.com/Cheeseman-Games/Cubic-Engine.git", optional = true }
 wasm-bindgen = { version = "0.2", optional = true }
 js-sys = { version = "0.3", optional = true }
 web-sys = { version = "0.3", optional = true, features = [
