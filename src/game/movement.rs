@@ -1,7 +1,7 @@
-use cubic_engine::world::EntityId;
-use cubic_engine::{System, TickContext};
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
+use cubic_engine::world::EntityId;
+use cubic_engine::{System, TickContext};
 
 /// Moves fighters, applies knockback decay and clamps to the arena, all from
 /// immutable reads plus a two-pass write-back through one reused buffer.
@@ -21,8 +21,12 @@ impl System for MovementSystem {
         self.steps.clear();
         let n = players.len().min(transforms.len());
         for i in 0..n {
-            let Some(player) = players[i].as_ref() else { continue };
-            let Some(body) = transforms[i].as_ref() else { continue };
+            let Some(player) = players[i].as_ref() else {
+                continue;
+            };
+            let Some(body) = transforms[i].as_ref() else {
+                continue;
+            };
 
             let speed = match player.state {
                 FighterState::Neutral => MOVE_SPEED,

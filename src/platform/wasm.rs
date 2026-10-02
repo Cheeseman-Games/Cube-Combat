@@ -1,14 +1,14 @@
 use crate::app::App;
+use crate::game::constants::*;
+use cubic_engine::Game;
 use cubic_engine::input::{InputState, KeyCode};
 use cubic_engine::render::DrawList;
-use cubic_engine::Game;
 use cubic_render::canvas::CanvasRenderer;
-use crate::game::constants::*;
 use std::cell::RefCell;
 use std::rc::Rc;
+use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
 
 const STEP: f64 = 1.0 / 60.0;
 const MAX_FRAME: f64 = 0.25;
@@ -17,7 +17,9 @@ const MAX_FRAME: f64 = 0.25;
 #[wasm_bindgen]
 pub fn start(canvas_id: &str) -> Result<(), JsValue> {
     let window = web_sys::window().ok_or_else(|| JsValue::from_str("no window"))?;
-    let document = window.document().ok_or_else(|| JsValue::from_str("no document"))?;
+    let document = window
+        .document()
+        .ok_or_else(|| JsValue::from_str("no document"))?;
     let canvas: web_sys::HtmlCanvasElement = document
         .get_element_by_id(canvas_id)
         .ok_or_else(|| JsValue::from_str("canvas not found"))?
@@ -31,7 +33,9 @@ pub fn start(canvas_id: &str) -> Result<(), JsValue> {
         .dyn_into()?;
 
     let input = Rc::new(RefCell::new(InputState::new()));
-    let performance = window.performance().ok_or_else(|| JsValue::from_str("no performance"))?;
+    let performance = window
+        .performance()
+        .ok_or_else(|| JsValue::from_str("no performance"))?;
     let app = Rc::new(RefCell::new(App::new_seeded(performance.now() as u32)));
     let renderer = Rc::new(RefCell::new(CanvasRenderer::new(context, ARENA_W, ARENA_H)));
     let list = Rc::new(RefCell::new(DrawList::new()));

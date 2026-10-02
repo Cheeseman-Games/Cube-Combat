@@ -1,6 +1,6 @@
+use crate::game::{Game, MatchState, Side};
 use cubic_engine::input::InputState;
 use cubic_engine::render::DrawList;
-use crate::game::{Game, MatchState, Side};
 use std::time::Instant;
 
 /// Headless native runner: steps the fixed simulation a number of ticks and

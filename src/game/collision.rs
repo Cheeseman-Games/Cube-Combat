@@ -1,8 +1,8 @@
-use cubic_engine::world::EntityId;
-use cubic_engine::{System, TickContext};
+use crate::game::AttackBox;
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
-use crate::game::{AttackBox};
+use cubic_engine::world::EntityId;
+use cubic_engine::{System, TickContext};
 
 struct Blow {
     id: EntityId,
@@ -58,8 +58,12 @@ impl System for AttackCollisionSystem {
                     if i == box_id as usize {
                         continue;
                     }
-                    let Some(player) = players[i].as_ref() else { continue };
-                    let Some(body) = transforms[i].as_ref() else { continue };
+                    let Some(player) = players[i].as_ref() else {
+                        continue;
+                    };
+                    let Some(body) = transforms[i].as_ref() else {
+                        continue;
+                    };
                     if player.state == FighterState::Defeated || player.side == boxx.side {
                         continue;
                     }
@@ -103,10 +107,7 @@ impl System for AttackCollisionSystem {
         if !self.blows.is_empty() {
             let players = ctx.world.store_mut::<Player>();
             for blow in &self.blows {
-                if let Some(player) = players
-                    .get_mut(blow.id as usize)
-                    .and_then(Option::as_mut)
-                {
+                if let Some(player) = players.get_mut(blow.id as usize).and_then(Option::as_mut) {
                     if blow.blocked {
                         player.hp = blow.hp;
                         player.stun_left = blow.stun_left;

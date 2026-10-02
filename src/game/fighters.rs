@@ -1,9 +1,9 @@
+use crate::game::constants::*;
+use crate::game::{AttackBox, Side};
 use cubic_engine::input::KeyCode;
 use cubic_engine::math::Rect;
 use cubic_engine::world::{EntityId, World};
 use cubic_engine::{System, TickContext};
-use crate::game::constants::*;
-use crate::game::{AttackBox, Side};
 
 /// Position + size of an entity. Y grows downward and the cube's feet sit on
 /// the floor line, so `y = FLOOR_Y - CUBE_SIZE`.
@@ -91,7 +91,8 @@ impl System for ControlSystem {
                     KeyCode::BracketRight,
                 ),
             };
-            player.move_dir = (ctx.input.is_down(right) as i8 - ctx.input.is_down(left) as i8) as f32;
+            player.move_dir =
+                (ctx.input.is_down(right) as i8 - ctx.input.is_down(left) as i8) as f32;
             player.wants_slash = ctx.frame.pressed(slash);
             player.wants_block = ctx.input.is_down(block);
         }
@@ -134,15 +135,23 @@ impl System for FightSystem {
         let mut x_by_side = [0.0f32; 2];
         let mut side_present = [false; 2];
         for i in 0..n {
-            let Some(player) = players[i].as_ref() else { continue };
-            let Some(body) = transforms[i].as_ref() else { continue };
+            let Some(player) = players[i].as_ref() else {
+                continue;
+            };
+            let Some(body) = transforms[i].as_ref() else {
+                continue;
+            };
             x_by_side[player.side.index()] = body.x;
             side_present[player.side.index()] = true;
         }
 
         for i in 0..n {
-            let Some(player) = players[i].as_ref() else { continue };
-            let Some(body) = transforms[i].as_ref() else { continue };
+            let Some(player) = players[i].as_ref() else {
+                continue;
+            };
+            let Some(body) = transforms[i].as_ref() else {
+                continue;
+            };
             let id = i as EntityId;
             let mut pl = player.clone();
 
@@ -217,7 +226,11 @@ impl FightSystem {
         } else {
             spawn.body.x
         };
-        let box_x = if spawn.facing > 0.0 { front } else { front - SLASH_REACH };
+        let box_x = if spawn.facing > 0.0 {
+            front
+        } else {
+            front - SLASH_REACH
+        };
         world.insert(
             spawn.id,
             AttackBox {

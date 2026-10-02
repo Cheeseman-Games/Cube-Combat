@@ -1,11 +1,11 @@
-use cubic_engine::input::{FrameInput, InputState, KeyCode};
-use cubic_engine::render::{DrawList, Rgba};
-use cubic_engine::Game as EngineGame;
-use crate::game::ai::AiDifficulty;
-use crate::game::constants::BG;
 use crate::game::Game;
 use crate::game::GameMode;
+use crate::game::ai::AiDifficulty;
+use crate::game::constants::BG;
 use crate::menus::{Menu, MenuAction};
+use cubic_engine::Game as EngineGame;
+use cubic_engine::input::{FrameInput, InputState, KeyCode};
+use cubic_engine::render::{DrawList, Rgba};
 
 enum Screen {
     Menu(Menu),

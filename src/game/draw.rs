@@ -1,7 +1,7 @@
-use cubic_engine::render::{Renderer, Rgba};
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
 use crate::game::{AttackBox, Game, MatchState, Side};
+use cubic_engine::render::{Renderer, Rgba};
 
 const FLOOR: Rgba = Rgba::new(1.0, 1.0, 1.0, 0.15);
 const BAR_BG: Rgba = Rgba::new(1.0, 1.0, 1.0, 0.12);
@@ -54,7 +54,11 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
         let pal = palette(side);
         let is_left = side == Side::Blue;
 
-        let label_x = if is_left { 40.0 } else { ARENA_W - 40.0 - bar_w };
+        let label_x = if is_left {
+            40.0
+        } else {
+            ARENA_W - 40.0 - bar_w
+        };
         let name = if is_left { "BLUE" } else { "RED" };
         r.text(
             name,
@@ -65,7 +69,17 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
         );
 
         hp_bar(r, label_x, bar_y, bar_w, player.hp / MAX_HP, pal.body);
-        r.fill_rect(if is_left { label_x - 6.0 } else { label_x + bar_w + 6.0 }, bar_y, 4.0, 14.0, WHITE);
+        r.fill_rect(
+            if is_left {
+                label_x - 6.0
+            } else {
+                label_x + bar_w + 6.0
+            },
+            bar_y,
+            4.0,
+            14.0,
+            WHITE,
+        );
         r.text(
             &format!("wins: {}", game.wins(side)),
             label_x,
@@ -76,16 +90,34 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
 
         match player.state {
             FighterState::Blocking => {
-                r.fill_rect(body.x - 4.0, body.y - 4.0, body.w + 8.0, body.h + 8.0, Rgba::new(1.0, 0.82, 0.30, 0.28));
+                r.fill_rect(
+                    body.x - 4.0,
+                    body.y - 4.0,
+                    body.w + 8.0,
+                    body.h + 8.0,
+                    Rgba::new(1.0, 0.82, 0.30, 0.28),
+                );
             }
             FighterState::Slashing => {
-                r.fill_rect(body.x - 3.0, body.y - 3.0, body.w + 6.0, body.h + 6.0, Rgba::new(1.0, 1.0, 1.0, 0.25));
+                r.fill_rect(
+                    body.x - 3.0,
+                    body.y - 3.0,
+                    body.w + 6.0,
+                    body.h + 6.0,
+                    Rgba::new(1.0, 1.0, 1.0, 0.25),
+                );
             }
             _ => {}
         }
 
         if player.state == FighterState::HitStun {
-            r.fill_rect(body.x, body.y, body.w, body.h, Rgba::new(1.0, 1.0, 1.0, 0.35));
+            r.fill_rect(
+                body.x,
+                body.y,
+                body.w,
+                body.h,
+                Rgba::new(1.0, 1.0, 1.0, 0.35),
+            );
         }
 
         r.fill_rect(body.x, body.y, body.w, body.h, pal.body);
@@ -98,7 +130,13 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
 
     for (_, slash) in game.world().iter::<AttackBox>() {
         let pal = palette(slash.side);
-        r.fill_rect(slash.rect.x, slash.rect.y, slash.rect.w, slash.rect.h, pal.accent);
+        r.fill_rect(
+            slash.rect.x,
+            slash.rect.y,
+            slash.rect.w,
+            slash.rect.h,
+            pal.accent,
+        );
         r.fill_rect(
             slash.rect.x + 10.0,
             slash.rect.y + 10.0,
@@ -126,7 +164,19 @@ pub fn draw(game: &Game, r: &mut dyn Renderer) {
             Side::Blue => "BLUE WINS",
             Side::Red => "RED WINS",
         };
-        r.text(label, ARENA_W / 2.0 - 110.0, ARENA_H / 2.0 - 60.0, 44.0, col.body);
-        r.text("press Enter to rematch", ARENA_W / 2.0 - 120.0, ARENA_H / 2.0 + 18.0, 18.0, GOLD);
+        r.text(
+            label,
+            ARENA_W / 2.0 - 110.0,
+            ARENA_H / 2.0 - 60.0,
+            44.0,
+            col.body,
+        );
+        r.text(
+            "press Enter to rematch",
+            ARENA_W / 2.0 - 120.0,
+            ARENA_H / 2.0 + 18.0,
+            18.0,
+            GOLD,
+        );
     }
 }

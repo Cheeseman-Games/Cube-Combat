@@ -1,7 +1,7 @@
-use cubic_engine::{System, TickContext};
+use crate::game::Side;
 use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
-use crate::game::Side;
+use cubic_engine::{System, TickContext};
 
 /// Difficulty profile for the 1-player AI.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -23,8 +23,8 @@ impl AiDifficulty {
     /// Cycle to the previous / next difficulty.
     pub fn next(self, dir: i32) -> Self {
         let all = [AiDifficulty::Easy, AiDifficulty::Normal, AiDifficulty::Hard];
-        let idx = (all.iter().position(|d| *d == self).unwrap() as i32 + dir.signum())
-            .rem_euclid(3) as usize;
+        let idx = (all.iter().position(|d| *d == self).unwrap() as i32 + dir.signum()).rem_euclid(3)
+            as usize;
         all[idx]
     }
 }
@@ -86,21 +86,28 @@ impl System for AiControlSystem {
         let dt = ctx.dt;
         let (mut red_idx, mut blue_x) = (None, None);
         {
-            let (players, transforms) = (ctx.world.store::<Player>(), ctx.world.store::<Transform>());
+            let (players, transforms) =
+                (ctx.world.store::<Player>(), ctx.world.store::<Transform>());
             let (Some(players), Some(transforms)) = (players, transforms) else {
                 return;
             };
             let n = players.len().min(transforms.len());
             for i in 0..n {
-                let Some(player) = players[i].as_ref() else { continue };
-                let Some(body) = transforms[i].as_ref() else { continue };
+                let Some(player) = players[i].as_ref() else {
+                    continue;
+                };
+                let Some(body) = transforms[i].as_ref() else {
+                    continue;
+                };
                 match player.side {
                     Side::Red => red_idx = Some(i),
                     Side::Blue => blue_x = Some(body.x),
                 }
             }
         }
-        let (Some(red_idx), Some(blue_x)) = (red_idx, blue_x) else { return };
+        let (Some(red_idx), Some(blue_x)) = (red_idx, blue_x) else {
+            return;
+        };
 
         self.decide_at -= dt;
         if self.decide_at <= 0.0 {
@@ -135,10 +142,7 @@ impl System for AiControlSystem {
         };
         // wants_slash is a one-shot request — don't re-queue while a slash or
         // knockback is still executing.
-        let mid_action = matches!(
-            player.state,
-            FighterState::Slashing | FighterState::HitStun
-        );
+        let mid_action = matches!(player.state, FighterState::Slashing | FighterState::HitStun);
         player.move_dir = self.dir;
         player.wants_slash = !mid_action && self.slash;
         player.wants_block =

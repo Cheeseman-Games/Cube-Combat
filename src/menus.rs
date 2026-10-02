@@ -1,8 +1,8 @@
-use cubic_engine::input::{FrameInput, KeyCode};
-use cubic_engine::render::{Renderer, Rgba};
+use crate::game::GameMode;
 use crate::game::ai::AiDifficulty;
 use crate::game::constants::*;
-use crate::game::GameMode;
+use cubic_engine::input::{FrameInput, KeyCode};
+use cubic_engine::render::{Renderer, Rgba};
 
 const FLASH_CHANCE: f32 = 0.03;
 const FLASH_DURATION: f32 = 0.12;
@@ -209,7 +209,13 @@ impl Menu {
 
         let opt_y = ARENA_H * 0.42;
         Self::draw_item(r, "2 Players", self.selected == 0, opt_y, 30.0);
-        Self::draw_item(r, "1 Player (vs AI)", self.selected == 1, opt_y + 46.0, 30.0);
+        Self::draw_item(
+            r,
+            "1 Player (vs AI)",
+            self.selected == 1,
+            opt_y + 46.0,
+            30.0,
+        );
 
         let hint = "Up/Down: select    Enter: confirm    Esc: back";
         let hint_x = (ARENA_W - text_width(hint, 13.0)) / 2.0;
@@ -218,8 +224,19 @@ impl Menu {
 
     fn setting_rows(&self) -> [(String, String); 2] {
         [
-            ("AI Difficulty".to_owned(), self.settings.ai.label().to_owned()),
-            ("Show Controls Hint".to_owned(), if self.settings.show_hints { "On" } else { "Off" }.to_owned()),
+            (
+                "AI Difficulty".to_owned(),
+                self.settings.ai.label().to_owned(),
+            ),
+            (
+                "Show Controls Hint".to_owned(),
+                if self.settings.show_hints {
+                    "On"
+                } else {
+                    "Off"
+                }
+                .to_owned(),
+            ),
         ]
     }
 

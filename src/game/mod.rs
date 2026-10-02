@@ -5,13 +5,13 @@ pub mod draw;
 pub mod fighters;
 pub mod movement;
 
+use crate::game::ai::AiDifficulty;
+use crate::game::constants::*;
+use crate::game::fighters::{Player, Transform};
 use cubic_engine::input::{FrameInput, InputState, KeyCode};
 use cubic_engine::math::Rect;
 use cubic_engine::world::{EntityId, World};
 use cubic_engine::{System, TickContext};
-use crate::game::ai::AiDifficulty;
-use crate::game::constants::*;
-use crate::game::fighters::{Player, Transform};
 
 /// How a match is played. In 1-player mode the red cube is driven by AI.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -179,8 +179,16 @@ impl Game {
     }
 
     fn resolve_defeat(&mut self) {
-        let blue_hp = self.world.get::<Player>(self.blue).map(|p| p.hp).unwrap_or(0.0);
-        let red_hp = self.world.get::<Player>(self.red).map(|p| p.hp).unwrap_or(0.0);
+        let blue_hp = self
+            .world
+            .get::<Player>(self.blue)
+            .map(|p| p.hp)
+            .unwrap_or(0.0);
+        let red_hp = self
+            .world
+            .get::<Player>(self.red)
+            .map(|p| p.hp)
+            .unwrap_or(0.0);
 
         let winner = if blue_hp <= 0.0 {
             Some(Side::Red)
@@ -245,11 +253,17 @@ mod tests {
     }
 
     fn hp(game: &Game, side: Side) -> f32 {
-        game.world().get::<Player>(game.entity_for(side)).unwrap().hp
+        game.world()
+            .get::<Player>(game.entity_for(side))
+            .unwrap()
+            .hp
     }
 
     fn x_of(game: &Game, side: Side) -> f32 {
-        game.world().get::<Transform>(game.entity_for(side)).unwrap().x
+        game.world()
+            .get::<Transform>(game.entity_for(side))
+            .unwrap()
+            .x
     }
 
     fn set_pos(game: &mut Game, side: Side, x: f32) {
@@ -272,7 +286,10 @@ mod tests {
         // Advance through windup + active + recover.
         tick(&mut game, &mut input, 30);
 
-        assert!(hp(&game, Side::Red) < MAX_HP, "red should have taken damage");
+        assert!(
+            hp(&game, Side::Red) < MAX_HP,
+            "red should have taken damage"
+        );
     }
 
     #[test]
@@ -287,9 +304,16 @@ mod tests {
 
         let hp_after = hp(&game, Side::Red);
         // Only chip damage, no full hit and no hit-stun.
-        assert_eq!(hp_after, MAX_HP - SLASH_CHIP, "blocked hit should only chip");
         assert_eq!(
-            game.world().get::<Player>(game.entity_for(Side::Red)).unwrap().state,
+            hp_after,
+            MAX_HP - SLASH_CHIP,
+            "blocked hit should only chip"
+        );
+        assert_eq!(
+            game.world()
+                .get::<Player>(game.entity_for(Side::Red))
+                .unwrap()
+                .state,
             FighterState::Blocking
         );
     }
