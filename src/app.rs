@@ -1,7 +1,8 @@
 use cubic_engine::input::{FrameInput, InputState, KeyCode};
-use cubic_engine::render::Renderer;
-use cubic_engine::GameDriver;
+use cubic_engine::render::{DrawList, Rgba};
+use cubic_engine::Game as EngineGame;
 use crate::game::ai::AiDifficulty;
+use crate::game::constants::BG;
 use crate::game::Game;
 use crate::game::GameMode;
 use crate::menus::{Menu, MenuAction};
@@ -13,6 +14,10 @@ enum Screen {
 
 /// Top-level game shell: hosts the menu screens and the match, switching
 /// between them based on user input.
+///
+/// This is the type the engine runtime drives — it implements
+/// [`EngineGame`], so a host (desktop window, wasm canvas, headless runner)
+/// only ever calls `update`/`draw` and never touches the menu or match code.
 pub struct App {
     screen: Screen,
 }
@@ -39,8 +44,8 @@ impl Default for App {
     }
 }
 
-impl GameDriver for App {
-    fn simulate(&mut self, dt: f32, input: &InputState, frame: &FrameInput) {
+impl EngineGame for App {
+    fn update(&mut self, dt: f32, input: &InputState, frame: &FrameInput) {
         let mut launch: Option<(GameMode, AiDifficulty, bool)> = None;
         let mut back_to_menu = false;
 
@@ -66,11 +71,17 @@ impl GameDriver for App {
         }
     }
 
-    fn draw(&self, renderer: &mut dyn Renderer) {
+    fn draw(&mut self, list: &mut DrawList) {
         match &self.screen {
-            Screen::Menu(menu) => menu.draw(renderer),
-            Screen::Playing(game) => game.draw(renderer),
+            Screen::Menu(menu) => menu.draw(list),
+            Screen::Playing(game) => game.draw(list),
         }
+    }
+
+    /// Both screens clear to `BG` themselves; this only covers the frames where
+    /// `draw` is skipped.
+    fn clear_color(&self) -> Rgba {
+        BG
     }
 }
 
@@ -98,7 +109,7 @@ mod tests {
 
         let tick = |app: &mut App, input: &mut InputState, list: &mut DrawList| {
             let frame = input.begin_frame();
-            app.simulate(dt, input, &frame);
+            app.update(dt, input, &frame);
             app.draw(list);
         };
 

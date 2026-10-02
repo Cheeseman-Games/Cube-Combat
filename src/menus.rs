@@ -9,7 +9,6 @@ const FLASH_DURATION: f32 = 0.12;
 const TITLE: &str = "Cube Combat";
 const TITLE_LEN: usize = 11;
 
-const BG: Rgba = Rgba::rgb(0.09, 0.10, 0.13);
 const BLUE: Rgba = Rgba::rgb(0.24, 0.52, 0.95);
 const RED: Rgba = Rgba::rgb(0.88, 0.30, 0.34);
 const WHITE: Rgba = Rgba::rgb(0.92, 0.94, 0.96);

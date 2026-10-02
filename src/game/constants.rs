@@ -1,3 +1,5 @@
+use cubic_engine::render::Rgba;
+
 pub const ARENA_W: f32 = 800.0;
 pub const ARENA_H: f32 = 500.0;
 pub const FLOOR_Y: f32 = 420.0;
@@ -23,3 +25,7 @@ pub const BLOCK_KNOCKBACK: f32 = 50.0;
 pub const KNOCK_DECAY: f32 = 0.85;
 
 pub const MAX_HP: f32 = 100.0;
+
+/// Backdrop both the arena and the menus clear to, and what the app reports as
+/// its clear color.
+pub const BG: Rgba = Rgba::rgb(0.09, 0.10, 0.13);

@@ -1,7 +1,7 @@
 use crate::app::App;
 use cubic_engine::input::{InputState, KeyCode};
 use cubic_engine::render::DrawList;
-use cubic_engine::GameDriver;
+use cubic_engine::Game;
 use cubic_render::canvas::CanvasRenderer;
 use crate::game::constants::*;
 use std::cell::RefCell;
@@ -77,12 +77,12 @@ pub fn start(canvas_id: &str) -> Result<(), JsValue> {
             let frame = input_loop.borrow_mut().begin_frame();
             app_loop
                 .borrow_mut()
-                .simulate(STEP as f32, &input_loop.borrow(), &frame);
+                .update(STEP as f32, &input_loop.borrow(), &frame);
             *accumulator.borrow_mut() -= STEP;
         }
 
-        let a = app_loop.borrow();
-        a.draw(&mut *list_loop.borrow_mut());
+        let mut a = app_loop.borrow_mut();
+        a.draw(&mut list_loop.borrow_mut());
         drop(a);
         renderer_loop.borrow_mut().render(&*list_loop.borrow());
 

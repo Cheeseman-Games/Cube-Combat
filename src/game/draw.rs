@@ -3,7 +3,6 @@ use crate::game::constants::*;
 use crate::game::fighters::{FighterState, Player, Transform};
 use crate::game::{AttackBox, Game, MatchState, Side};
 
-const BG: Rgba = Rgba::rgb(0.09, 0.10, 0.13);
 const FLOOR: Rgba = Rgba::new(1.0, 1.0, 1.0, 0.15);
 const BAR_BG: Rgba = Rgba::new(1.0, 1.0, 1.0, 0.12);
 const WHITE: Rgba = Rgba::rgb(0.92, 0.94, 0.96);
