@@ -1,0 +1,25 @@
+# Cube Combat — the project manifest.
+#
+# What the engine is told before the game runs. Every field but the name has a
+# default, so delete anything you do not need; edit a value and re-run, because
+# this file is compiled into the game.
+#
+# `name` matches `package.name` in Cargo.toml (`cube_combat`), which is the rule
+# `cubic-cli` and the editor discover a project by.
+
+[game]
+name = "cube_combat"
+version = "0.1.0"
+tick_hz = 60
+# icon = "assets/icon.png"
+
+[window]
+title = "Cube Combat"
+width = 800
+height = 500
+resizable = true
+clear_color = "#171a21"
+
+[features]
+# The web build compiles the wasm canvas backend alongside the desktop one.
+web = false
